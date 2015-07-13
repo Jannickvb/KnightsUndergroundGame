@@ -37,13 +37,15 @@ public class Play extends GameState implements B2DVars {
 	private float tileSize;
 	private OrthogonalTiledMapRenderer tmr;
 
-	BodyDef bdef = new BodyDef();
-	FixtureDef fdef = new FixtureDef();
-	PolygonShape shape = new PolygonShape();
+	BodyDef bdef;
+	FixtureDef fdef;
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
 
+		bdef  = new BodyDef();
+		fdef  = new FixtureDef();
+		
 		world = new World(new Vector2(0, -9.81f), true);
 		cl = new GameContactListener();
 		world.setContactListener(cl);
@@ -55,13 +57,6 @@ public class Play extends GameState implements B2DVars {
 		createPlayer();
 		
 		createTiles();
-		
-		
-
-		
-		// /////////////////////////////////////////////
-
-	
 	}
 
 	@Override
@@ -94,21 +89,29 @@ public class Play extends GameState implements B2DVars {
 	public void handleInput() {
 		if (GameInput.isPressed(GameInput.VK_SPACE)) {
 			if (cl.isPlayerOnGround()) {
-				playerBody.applyForceToCenter(0, 250, true);
+				playerBody.setLinearVelocity(0, 500/PPM);
 			}
-
 		}
 		if (GameInput.isPressed(GameInput.VK_UP)) {
-			System.out.println("hold up");
+			if (cl.isPlayerOnGround()) {
+				playerBody.setLinearVelocity(0, 500/PPM);
+			}
+		}
+		if (GameInput.isDown(GameInput.VK_LEFT)) {
+				playerBody.applyForceToCenter(-100/PPM, 0, true);
+		}
+		if (GameInput.isDown(GameInput.VK_RIGHT)) {
+			playerBody.applyForceToCenter(100/PPM, 0, true);
 		}
 	}
 
 	public void createPlayer(){
 		// create falling box
-		bdef.position.set(160 / PPM, 200 / PPM);
+		bdef.position.set(300 / PPM, 200 / PPM);
 		bdef.type = BodyType.DynamicBody;
 		playerBody = world.createBody(bdef);
 
+		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(5 / PPM, 5 / PPM);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = BIT_PLAYER;
@@ -116,7 +119,7 @@ public class Play extends GameState implements B2DVars {
 		playerBody.createFixture(fdef).setUserData("player");
 
 		// create foot sensor
-		shape.setAsBox(2 / PPM, 2 / PPM, new Vector2(0, -5 / PPM), 0);
+		shape.setAsBox(4 / PPM, 2 / PPM, new Vector2(0, -5f / PPM), 0);
 		fdef.shape = shape;
 		fdef.isSensor = true;
 		playerBody.createFixture(fdef).setUserData("foot");
@@ -124,17 +127,37 @@ public class Play extends GameState implements B2DVars {
 	
 	public void createTiles(){
 		// load tile map
-		tilemap = new TmxMapLoader().load("filepath");
+		tilemap = new TmxMapLoader().load("maps/test.tmx");
 		tmr = new OrthogonalTiledMapRenderer(tilemap);
-
-		TiledMapTileLayer layer = (TiledMapTileLayer) tilemap.getLayers().get(
-				"name");
-		tileSize = layer.getTileWidth();
 		
-		createLayer(layer,BIT_GROUND);
+		//square blocks
+		TiledMapTileLayer layer = (TiledMapTileLayer) tilemap.getLayers().get(
+				"solid");
+		tileSize = layer.getTileWidth();
+		createLayer(layer,BIT_GROUND,0);
+		
+		//topleftslope
+		layer = (TiledMapTileLayer) tilemap.getLayers().get(
+				"topleftslope");
+		createLayer(layer,BIT_GROUND,1);
+		
+		//toprightslope
+		layer = (TiledMapTileLayer) tilemap.getLayers().get(
+				"toprightslope");
+		createLayer(layer,BIT_GROUND,2);
+		
+		//botleftslope
+		layer = (TiledMapTileLayer) tilemap.getLayers().get(
+				"botleftslope");
+		createLayer(layer,BIT_GROUND,3);
+		
+		//botrightslope
+		layer = (TiledMapTileLayer) tilemap.getLayers().get(
+				"botrightslope");
+		createLayer(layer,BIT_GROUND,4);
 	}
 	
-	public void createLayer(TiledMapTileLayer layer, short bits){
+	public void createLayer(TiledMapTileLayer layer, short bits,int type){
 		
 		bdef = new BodyDef();
 		fdef = new FixtureDef();
@@ -156,15 +179,49 @@ public class Play extends GameState implements B2DVars {
 				);
 				
 				ChainShape cs = new ChainShape();
-				Vector2[] v = new Vector2[4];
-				v[0] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
-				v[1] = new Vector2(-tileSize /2 /PPM,tileSize/2/PPM);
-				v[2] = new Vector2(tileSize /2 /PPM,tileSize/2/PPM);
-				v[3] = new Vector2(tileSize /2 /PPM,-tileSize/2/PPM);
+				Vector2[] v = null;
+				switch(type){
+				case 0:
+					v = new Vector2[5];
+					v[0] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					v[1] = new Vector2(-tileSize /2 /PPM,tileSize/2/PPM);
+					v[2] = new Vector2(tileSize /2 /PPM,tileSize/2/PPM);
+					v[3] = new Vector2(tileSize /2 /PPM,-tileSize/2/PPM);
+					v[4] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					break;
+				case 1:
+					v = new Vector2[4];
+					v[0] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					v[1] = new Vector2(-tileSize /2 /PPM,tileSize/2/PPM);
+					v[2] = new Vector2(tileSize /2 /PPM,tileSize/2/PPM);
+					v[3] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					break;
+				case 2:
+					v = new Vector2[4];
+					v[0] = new Vector2(-tileSize /2 /PPM,tileSize/2/PPM);
+					v[1] = new Vector2(tileSize /2 /PPM,tileSize/2/PPM);
+					v[2] = new Vector2(tileSize /2 /PPM,-tileSize/2/PPM);
+					v[3] = new Vector2(-tileSize /2 /PPM,tileSize/2/PPM);
+					break;
+				case 3:
+					v = new Vector2[4];
+					v[0] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					v[1] = new Vector2(-tileSize /2 /PPM,tileSize/2/PPM);
+					v[2] = new Vector2(tileSize /2 /PPM,-tileSize/2/PPM);
+					v[3] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					break;
+				case 4:
+					v = new Vector2[4];
+					v[0] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					v[1] = new Vector2(tileSize /2 /PPM,tileSize/2/PPM);
+					v[2] = new Vector2(tileSize /2 /PPM,-tileSize/2/PPM);
+					v[3] = new Vector2(-tileSize /2 /PPM,-tileSize/2/PPM);
+					break;
+				}
+				if(type>=0&&type<=4)
+					cs.createChain(v);
 				
-				cs.createChain(v);
-				
-				fdef.friction = 0;
+				fdef.friction = 1/PPM;
 				fdef.shape = cs;
 				fdef.filter.categoryBits = BIT_GROUND;
 				fdef.filter.maskBits = BIT_PLAYER;

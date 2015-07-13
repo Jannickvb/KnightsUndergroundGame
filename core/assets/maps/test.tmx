@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="60" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="BasicTiles" tilewidth="32" tileheight="32">
+  <image source="BasicTiles.png" width="160" height="32"/>
+ </tileset>
+ <layer name="solid" width="30" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1MEOgCAMA1D4/5/24FUkXVeLSZv0OJ5G3BxjzDT9sB1xmKitSFy9GbfmOnaFY0epzDdXaa5ctRk3LnMW6lZ8dH4Xl8skrt9l7N28wu3YA6jRuX9crnP2af4rt9JVHK7ajBsXmVe6uyhcJKjLvCtzVvV7Mum4RwqTub9sT3Dd9uoZ0FTdjpxqu1zkjnW7f/8307sXFdYEcA==
+  </data>
+ </layer>
+ <layer name="topleftslope" width="30" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1tEJAAAEBUDZf2jZQT64W+CV4omAXSmTIWYMcJ8OB6C5zbDPHwY/2Dv4qwBktwAV
+  </data>
+ </layer>
+ <layer name="toprightslope" width="30" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1oEJACAIBECh/XduhohA+7sFVFS0CmZZYgMAB9xvAOBHyT9Ocu3M1WF2bnNI3b0OvYMXNvUnACs=
+  </data>
+ </layer>
+ <layer name="botleftslope" width="30" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1MkNADAIAzAe3X/mjsERe4EEkKgCAADgmtddYJHUXaXODbBB94/uzr8icY9mnpk99S5Te6X4Ll8ALQ==
+  </data>
+ </layer>
+ <layer name="botrightslope" width="30" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1TERADAIA0CW+rdcDe3CQf4VJAOhCoBUpzvAp6m5X6X0BGC2zf9qczeALknbmtI1pSek6LhpO9LjAla2ADM=
+  </data>
+ </layer>
+</map>
