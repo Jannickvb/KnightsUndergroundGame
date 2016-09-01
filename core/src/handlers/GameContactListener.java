@@ -8,8 +8,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class GameContactListener implements ContactListener{
 
-	private int contactsWithGround;
-
+	private int contactsWithGround,contactsWithRoof;
+	private boolean isFalling;
+	
 	//called when two fixtures start to collide
 	@Override
 	public void beginContact(Contact c) {
@@ -21,6 +22,12 @@ public class GameContactListener implements ContactListener{
 		}
 		if(b.getUserData() != null && b.getUserData().equals("foot")){
 			contactsWithGround++;
+		}
+		if(a.getUserData() != null && a.getUserData().equals("head")){
+			contactsWithRoof++;
+		}
+		if(b.getUserData() != null && b.getUserData().equals("head")){
+			contactsWithRoof++;
 		}
 	}
 
@@ -36,10 +43,36 @@ public class GameContactListener implements ContactListener{
 		if(b.getUserData() != null && b.getUserData().equals("foot")){
 			contactsWithGround--;
 		}
+		if(a.getUserData() != null && a.getUserData().equals("head")){
+			contactsWithRoof--;
+		}
+		if(b.getUserData() != null && b.getUserData().equals("head")){
+			contactsWithRoof--;
+		}
 	}
 
 	public boolean isPlayerOnGround(){
-		return contactsWithGround>0;
+		if(contactsWithGround>0){
+			setFalling(false);
+			return true;
+		}
+		else return false;
+	}
+	
+	public boolean playerHitRoof(){
+		if(contactsWithRoof>0){
+			setFalling(true);
+			return true;
+		}
+		else return false;
+	}
+	
+	public void setFalling(boolean isFalling){
+		this.isFalling = isFalling;
+	}
+	
+	public boolean isFalling(){
+		return isFalling;
 	}
 	
 	//collision detection

@@ -7,6 +7,7 @@ import handlers.GameStateManager;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,8 +23,7 @@ public class Game implements ApplicationListener {
 	private OrthographicCamera cam,
 							   hudCam;
 	private GameStateManager gsm;
-	
-	public Content res;
+	public static Content res;
 	
 	public void create() {
 		Gdx.input.setInputProcessor(new GameInputProcessor());

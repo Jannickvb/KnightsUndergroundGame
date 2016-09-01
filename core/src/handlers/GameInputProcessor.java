@@ -21,6 +21,9 @@ public class GameInputProcessor extends InputAdapter{
 		if(k == Keys.SPACE){
 			GameInput.setKey(GameInput.VK_SPACE, true);
 		}
+		if(k == Keys.SHIFT_LEFT || k == Keys.SHIFT_RIGHT){
+			GameInput.setKey(GameInput.VK_SHIFT, true);
+		}
 		return true;
 	}
 
@@ -39,6 +42,9 @@ public class GameInputProcessor extends InputAdapter{
 		}
 		if(k == Keys.SPACE){
 			GameInput.setKey(GameInput.VK_SPACE, false);
+		}
+		if(k == Keys.SHIFT_LEFT || k == Keys.SHIFT_RIGHT){
+			GameInput.setKey(GameInput.VK_SHIFT, false);
 		}
 		return true;
 	}
